@@ -1,0 +1,23 @@
+{application, actor, [
+    {description, "An OTP application"},
+    {vsn, "0.1.0"},
+    {registered, []},
+    {mod, {actor_app, []}},
+    {applications, [
+        kernel,
+        stdlib,
+        amqp_client
+    ]},
+    {env, []},
+    {modules, [
+        actor_app,
+        actor_sup,
+        receiver,
+        sender,
+        doc,
+        doc_registry,
+        doc_queue
+    ]},
+    {licenses, ["Apache-2.0"]},
+    {links, []}
+ ]}.
