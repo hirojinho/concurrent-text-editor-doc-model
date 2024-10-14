@@ -10,13 +10,14 @@ start() ->
     {ok, Pid}.
 
 connect() ->
+    RabbitMQURL = get_rabbitmq_url(),
     % Open a connection to the RabbitMQ server
     {ok, Connection} = amqp_connection:start(#amqp_params_network{
-        host = "localhost",
+        host = RabbitMQURL,
         heartbeat = 30
     }),
     {ok, Channel} = amqp_connection:open_channel(Connection),
-    
+
     amqp_channel:call(Channel, #'queue.declare'{
         queue = <<"Hello">>
     }),
@@ -54,4 +55,10 @@ loop(Channel) ->
                     io:format("Received unexpected message format~n"),
                     loop(Channel)
             end
+    end.
+
+get_rabbitmq_url() ->
+    case os:getenv("RABBITMQ_URL") of
+        false -> io:format("RABBITMQ_URL not set, using default: localhost~n"), "localhost";
+        RabbitMQURL -> RabbitMQURL
     end.
