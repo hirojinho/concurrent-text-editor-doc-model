@@ -7,10 +7,12 @@ publish(Message) ->
     RabbitMQURL = get_rabbitmq_url(),
     RabbitMQUser = get_rabbitmq_user(),
     RabbitMQPass = get_rabbitmq_pass(),
+    RabbitMQPort = get_rabbitmq_port(),
     {ok, Connection} = amqp_connection:start(#amqp_params_network{
         host = RabbitMQURL,
         username = RabbitMQUser,
-        password = RabbitMQPass
+        password = RabbitMQPass,
+        port = RabbitMQPort
     }),
     {ok, Channel} = amqp_connection:open_channel(Connection),
     Publish = #'basic.publish'{
@@ -35,4 +37,10 @@ get_rabbitmq_pass() ->
     case os:getenv("RABBITMQ_DEFAULT_PASS") of
         false -> io:format("RABBITMQ_DEFAULT_PASS not set, using default: guest~n"), <<"guest">>;
         RabbitMQPass -> RabbitMQPass
+    end.
+
+get_rabbitmq_port() ->
+    case os:getenv("RABBITMQ_PORT") of
+        false -> io:format("RABBITMQ_PORT not set, using default: 5672~n"), 5672;
+        RabbitMQPort -> list_to_integer(RabbitMQPort)
     end.
