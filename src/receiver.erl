@@ -71,11 +71,11 @@ get_rabbitmq_url() ->
 get_rabbitmq_user() ->
     case os:getenv("RABBITMQ_DEFAULT_USER") of
         false -> io:format("RABBITMQ_DEFAULT_USER not set, using default: guest~n"), <<"guest">>;
-        RabbitMQUser -> RabbitMQUser
+        RabbitMQUser -> list_to_binary(RabbitMQUser)
     end.
 
 get_rabbitmq_pass() ->
     case os:getenv("RABBITMQ_DEFAULT_PASS") of
         false -> io:format("RABBITMQ_DEFAULT_PASS not set, using default: guest~n"), <<"guest">>;
-        RabbitMQPass -> RabbitMQPass
+        RabbitMQPass -> list_to_binary(RabbitMQPass)
     end.
